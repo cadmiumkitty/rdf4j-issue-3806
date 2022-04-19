@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  rdf4j-issue-3806:
+    image: dalstonsemantics.com/rdf4j-issue-3806:1.0.0
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    env_file:
+      - variables-rdf4j-issue-3806-docker.env
+    ports:
+      - "8849:8849"
+    volumes: 
+      - ./data:/data
