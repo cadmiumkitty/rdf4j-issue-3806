@@ -13,7 +13,7 @@ import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class NativeStoreClearIsolationLevelsNone {
+public class NativeStoreClear {
     
     public static void main(String args[]) throws Exception {
 
@@ -24,24 +24,28 @@ public class NativeStoreClearIsolationLevelsNone {
         store.setNamespaceIDCacheSize(10000);
         store.setValueCacheSize(10000000);
         store.setValueIDCacheSize(10000000);
+        
         Repository repo = new SailRepository(store);
 
-        RepositoryConnection connection = repo.getConnection();
+        try (RepositoryConnection connection = repo.getConnection()) {
 
-        ValueFactory vf = connection.getValueFactory();
+            ValueFactory vf = connection.getValueFactory();
 
-        IRI c1 = vf.createIRI("http://example.com/context");
+            IRI c = vf.createIRI("http://example.com/context");
 
-        long start = System.currentTimeMillis();
-        log.info("Calling connection.clear().");
+            long start = System.currentTimeMillis();
+            log.info("Calling connection.clear().");
 
-        connection.begin(IsolationLevels.NONE);
+            connection.begin(IsolationLevels.NONE);
 
-        connection.clear(c1);
+            connection.clear(c);
 
-        connection.commit();
+            connection.commit();
 
-        long finish = System.currentTimeMillis();
-        log.info("Completed connection.clear(). Duration: {}", finish - start);
+            long finish = System.currentTimeMillis();
+            log.info("Completed connection.clear(). Duration: {}", finish - start);
+        }
+
+        repo.shutDown();
     }
 }

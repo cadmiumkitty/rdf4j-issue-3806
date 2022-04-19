@@ -9,8 +9,11 @@ RUN rm /tmp/jprofiler_linux_13_0_1.tar.gz
 
 EXPOSE 8849
 
+RUN mkdir /data
+RUN chown rdf4j:rdf4j /data
+
 USER rdf4j:rdf4j
 
 ADD target/rdf4j-issue-3806-1.0.0-SNAPSHOT-jar-with-dependencies.jar rdf4j-issue-3806-1.0.0-SNAPSHOT-jar-with-dependencies.jar
 
-ENTRYPOINT ["java", "-cp", "rdf4j-issue-3806-1.0.0-SNAPSHOT-jar-with-dependencies.jar", "com.dalstonsemantics.rdf4j.NativeStoreClearIsolationLevelsNone"]
+ENTRYPOINT ["java", "-cp", "rdf4j-issue-3806-1.0.0-SNAPSHOT-jar-with-dependencies.jar", "com.dalstonsemantics.rdf4j.NativeStoreAddClear"]

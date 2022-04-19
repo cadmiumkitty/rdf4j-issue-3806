@@ -26,29 +26,33 @@ public class NativeStoreAdd {
         store.setNamespaceIDCacheSize(10000);
         store.setValueCacheSize(10000000);
         store.setValueIDCacheSize(10000000);
+        
         Repository repo = new SailRepository(store);
 
-        RepositoryConnection connection = repo.getConnection();
+        try (RepositoryConnection connection = repo.getConnection()) {
 
-        ValueFactory vf = connection.getValueFactory();
+            ValueFactory vf = connection.getValueFactory();
 
-        IRI p = RDFS.LABEL;
-        Literal o = vf.createLiteral("Some test resource");
-        IRI c = vf.createIRI("http://example.com/context");
-        
-        long start = System.currentTimeMillis();
-        log.info("Creating statements.");
+            IRI p = RDFS.LABEL;
+            Literal o = vf.createLiteral("Some test resource");
+            IRI c = vf.createIRI("http://example.com/context");
+            
+            long start = System.currentTimeMillis();
+            log.info("Creating statements.");
 
-        connection.begin(IsolationLevels.NONE);
+            connection.begin(IsolationLevels.NONE);
 
-        for (int i = 0; i < 10000; i++) {
-            IRI s = vf.createIRI("http://example.com/%d".formatted(i));
-            connection.add(s, p, o, c);
+            for (int i = 0; i < 10000; i++) {
+                IRI s = vf.createIRI("http://example.com/%d".formatted(i));
+                connection.add(s, p, o, c);
+            }
+
+            connection.commit();
+
+            long finish = System.currentTimeMillis();
+            log.info("Statements created. Duration: {}", finish-start);
         }
 
-        connection.commit();
-
-        long finish = System.currentTimeMillis();
-        log.info("Statements created. Duration: {}", finish-start);
+        repo.shutDown();
     }
 }
