@@ -14,6 +14,6 @@ RUN chown rdf4j:rdf4j /data
 
 USER rdf4j:rdf4j
 
-ADD target/rdf4j-issue-3806-1.0.0-SNAPSHOT-jar-with-dependencies.jar rdf4j-issue-3806-1.0.0-SNAPSHOT-jar-with-dependencies.jar
-
-ENTRYPOINT ["java", "-cp", "rdf4j-issue-3806-1.0.0-SNAPSHOT-jar-with-dependencies.jar", "com.dalstonsemantics.rdf4j.NativeStoreAddClear"]
+ADD target/rdf4j-issue-3806-1.0.0-SNAPSHOT-jar-with-dependencies.jar /rdf4j-issue-3806-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+ADD eclipse-rdf4j-4.0.0-SNAPSHOT-sdk/eclipse-rdf4j-4.0.0-SNAPSHOT/lib/ /jars/
+ENTRYPOINT ["java", "-cp", "/jars/*:/rdf4j-issue-3806-1.0.0-SNAPSHOT-jar-with-dependencies.jar", "com.dalstonsemantics.rdf4j.NativeStoreAddClear"]

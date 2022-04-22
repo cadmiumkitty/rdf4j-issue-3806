@@ -10,6 +10,6 @@ services:
     ports:
       - "8849:8849"
     volumes: 
-      - data:/data
+      - ./data:/data
 volumes:
   data:
